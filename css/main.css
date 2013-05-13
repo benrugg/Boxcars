@@ -1,0 +1,96 @@
+html, body {
+	
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	
+	padding-bottom: 40px;
+}
+
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+
+
+div {
+	
+	font-family: "Alegreya SC", serif;
+	width: 6em;
+	margin: 0.6em;
+	float: left;
+	background-color: rgb(245, 245, 245);
+	padding: 1.2em;
+}
+
+span {
+	
+	display: block;
+	font-size: 20px;
+	line-height: 0.9em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.hard_12 {
+	
+	color: blue;
+}
+
+.hard_12::after {
+	
+	content: "hard 12";
+	margin-left: .5em;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 18px;
+}
+
+label {
+	
+	font-weight: bold;
+	font-size: 17px;
+}
+
+label.won {
+	
+	color: green;
+}
+
+label.lost {
+	
+	color: red;
+}
+
+footer {
+	position: fixed;
+	width: 100%;
+	box-sizing: border-box;
+	bottom: 0px;
+	padding: 10px;
+	background-color: rgb(48, 48, 48);
+	color: white;
+	font-family: 'Kotta One', serif;
+	font-size: 19px;
+}
+
+footer.won {
+	
+	background-color: green;
+}
+
+footer.lost {
+	
+	background-color: red;
+}
