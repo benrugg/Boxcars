@@ -50,7 +50,7 @@ $(document).ready( ->
 		
 		total = winnings - losses
 		
-		wonOrLost = formatWinOrLoss(total, "Won " + formatCurrency(total), "Lost " + formatCurrency(-total), "Broke even")
+		wonOrLost = formatWinOrLoss(total, "Won #{formatCurrency(total)}", "Lost #{formatCurrency(-total)}", "Broke even")
 		
 		$("<label>").text(wonOrLost.text).addClass(wonOrLost.result).appendTo($newDiv)
 		
@@ -70,7 +70,7 @@ $(document).ready( ->
 	
 	
 	# display our final total
-	finalWinOrLoss = formatWinOrLoss(finalTotal, "You're up! You've won a total of " + formatCurrency(finalTotal), "There's always next time. You've lost a total of " + formatCurrency(-finalTotal), "Hey, you're even. Maybe you should keep betting.")
+	finalWinOrLoss = formatWinOrLoss(finalTotal, "You're up! You've won a total of #{formatCurrency(finalTotal)}", "There's always next time. You've lost a total of #{formatCurrency(-finalTotal)}", "Hey, you're even. Maybe you should keep betting.")
 	
 	$("<footer>").text(finalWinOrLoss.text).addClass(finalWinOrLoss.result).appendTo("body")
 )
