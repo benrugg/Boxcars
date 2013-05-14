@@ -79,10 +79,12 @@ footer {
 	box-sizing: border-box;
 	bottom: 0px;
 	padding: 10px;
-	background-color: rgb(48, 48, 48);
-	color: white;
 	font-family: 'Kotta One', serif;
 	font-size: 19px;
+	color: white;
+	background-color: rgb(48, 48, 48);
+	-webkit-transition: background-color 200ms;
+	transition: background-color 200ms;
 }
 
 footer.won {

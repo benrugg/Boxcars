@@ -5,72 +5,99 @@ $(document).ready( ->
 	oddsPayout = 30
 	
 	
-	# function for rolling one die
-	rollDie = -> Math.floor(Math.random() * 6) + 1
+		
+	# keep track of our total winnings or losses accross all simulations
+	runningTotal = 0
 	
 	
-	# function for rolling a pair of dice
-	rollPairOfDice = -> for i in [0..1]
-		rollDie()
 	
 	
-	# function for running a craps simultion
-	runCraps = (numTimes) ->
+	# function for handling the roll results
+	handleResults = (numRolls, numWins, rollResults) ->
 		
-		# start with some variables
-		numWins = 0
-		
-		
-		# create a new div to contain our results
-		$newDiv = $("<div>").appendTo("body")
-		
-		
-		# roll the dice and keep track of our results
-		rolls = for i in [1..numTimes] by 1
-			
-			# roll the dice and add them to our div
-			newRoll = rollPairOfDice()
-			$newSpan = $("<span>").text(newRoll.join()).appendTo($newDiv)
-			
-			
-			# if the roll is a 12, highlight it!
-			if newRoll[0] + newRoll[1] is 12
-				
-				# highlight the roll
-				$newSpan.addClass("hard_12")
-				
-				
-				# keep track of our win
-				numWins++
-		
-		
-		# show our total winnings or losses
-		losses = (numTimes - numWins) * betAmount
+		# determine our total winnings or losses
+		losses = (numRolls - numWins) * betAmount
 		winnings = numWins * betAmount * oddsPayout
 		
 		total = winnings - losses
 		
-		wonOrLost = formatWinOrLoss(total, "Won #{formatCurrency(total)}", "Lost #{formatCurrency(-total)}", "Broke even")
 		
-		$("<label>").text(wonOrLost.text).addClass(wonOrLost.result).appendTo($newDiv)
+		# update our running total
+		updateRunningTotal(total)
 		
 		
-		# return the total winnings or losses
-		return total
+		# if we want to display the roll results...
+		if (rollResults != "")
+			
+			# create a new div and fill it with our results
+			$newDiv = $("<div>").html(rollResults).appendTo("body")
+			
+			
+			# add a label at the end of the results
+			wonOrLost = formatWinOrLoss(total, "Won #{formatCurrency(total)}", "Lost #{formatCurrency(-total)}", "Broke even")
+			
+			$("<label>").text(wonOrLost.text).addClass(wonOrLost.result).appendTo($newDiv)
+		
+		
+		
 	
 	
 	
-	# keep track of our total winnings or losses accross all simulations
-	finalTotal = 0
+	# create a web worker that will actually run the craps simulation
+	worker = new Worker("js/runCraps.js")
 	
 	
-	# run the simulation a bunch of times
+	# create a listener to handle the worker's response
+	worker.addEventListener("message", (e) ->
+		
+		# display the results of this craps simulation
+		handleResults e.data.numRolls, e.data.numWins, e.data.rollResults
+		
+	, false)
+	
+	
+	# function to tell the worker to run the craps simulation once
+	runCraps = -> 
+		worker.postMessage {numRolls: 20, onceOrIndefinitely: "once"}
+	
+	
+	# function to tell the worker to keep running the simulation indefinitely
+	keepRunningCraps = ->
+		worker.postMessage {numRolls: 1, onceOrIndefinitely: "indefinitely"}
+	
+	
+	# listen for the escape key to stop running the simulation
+	$(document).on("keyup", (e) ->
+		
+		if e.keyCode is 27 then worker.terminate()
+	)
+	
+	
+	
+	
+	
+	# function for updating our running total
+	updateRunningTotal = (newTotal) ->
+		
+		# add the newest winnings/losses to the running total
+		runningTotal += newTotal
+		
+		
+		# display the running total
+		finalWinOrLoss = formatWinOrLoss(runningTotal, "You're up! You've won a total of #{formatCurrency(runningTotal)}", "There's always next time. You've lost a total of #{formatCurrency(-runningTotal)}", "Hey, you're even. Maybe you should keep betting.")
+		
+		$("footer").text(finalWinOrLoss.text).removeClass().addClass(finalWinOrLoss.result)
+	
+	
+	
+	
+	
+	
+	# run the simulation a bunch of times to get us started
 	for i in [1..10]
-		finalTotal += runCraps(20)
+		runCraps()
 	
 	
-	# display our final total
-	finalWinOrLoss = formatWinOrLoss(finalTotal, "You're up! You've won a total of #{formatCurrency(finalTotal)}", "There's always next time. You've lost a total of #{formatCurrency(-finalTotal)}", "Hey, you're even. Maybe you should keep betting.")
-	
-	$("<footer>").text(finalWinOrLoss.text).addClass(finalWinOrLoss.result).appendTo("body")
+	# after that, tell our web worker to just keep running
+	keepRunningCraps()
 )
