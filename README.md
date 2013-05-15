@@ -1,8 +1,8 @@
-Hard-12
+Boxcars
 =======
 
-A quick project to satisfy my gambling curiosity while learning CoffeeScript and web workers. 
+A quick project to satisfy my gambling/statistics curiosity while learning CoffeeScript and web workers. 
 
 And using GitHub Pages for the first time, too:
 
-**http://benrugg.github.io/Hard-12/**
+**http://benrugg.github.io/Boxcars/**

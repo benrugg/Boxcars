@@ -1,6 +1,6 @@
 $(document).ready( ->
 	
-	# set the price of the table (in dollars), and the payout for a hard 12
+	# set the price of the table (in dollars), and the payout for rolling boxcars
 	betAmount = 5
 	oddsPayout = 30
 	

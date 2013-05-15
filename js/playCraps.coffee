@@ -39,7 +39,7 @@ context.playCraps = (numRolls, returnAllRolls) ->
 		newRoll = rollPairOfDice()
 		
 		
-		# if we just rolled a hard 12, add it to the wins!
+		# if we just rolled a 12, add it to the wins!
 		if newRoll[0] + newRoll[1] is 12
 			
 			thisRollWon = true
