@@ -4,12 +4,6 @@ html, body {
 	padding: 0;
 }
 
-body {
-	
-	padding-bottom: 40px;
-}
-
-
 .clearfix:after {
 	content: ".";
 	display: block;
@@ -24,10 +18,30 @@ body {
 }
 
 
+header {
+	position: fixed;
+	width: 100%;
+	box-sizing: border-box;
+	border: solid .6em white;
+	background-color: rgb(145, 145, 145);
+	color: white;
+	padding: 0.8em;
+	font-family: 'Kotta One', serif;
+	font-size: 17px;
+	cursor: pointer;
+}
+
+
+article {
+	
+	padding: 3.7em 0 2.5em;
+}
+
+
 div {
 	
 	font-family: "Alegreya SC", serif;
-	width: 6em;
+	width: 6.6em;
 	margin: 0.6em;
 	float: left;
 	background-color: rgb(245, 245, 245);
@@ -43,14 +57,14 @@ span {
 	white-space: nowrap;
 }
 
-.hard_12 {
+.boxcars {
 	
 	color: blue;
 }
 
-.hard_12::after {
+.boxcars::after {
 	
-	content: "hard 12";
+	content: "boxcars";
 	margin-left: .5em;
 	font-weight: bold;
 	font-style: italic;
@@ -75,6 +89,7 @@ label.lost {
 
 footer {
 	position: fixed;
+	display: none;
 	width: 100%;
 	box-sizing: border-box;
 	bottom: 0px;

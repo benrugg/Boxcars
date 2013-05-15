@@ -1,6 +1,7 @@
 window.formatCurrency = (amount) ->
 	if (amount < 0) then "-$" + -amount else "$" + amount
 
+
 window.formatWinOrLoss = (amountWonOrLost, wonText, lostText, evenText) ->
 	switch
 		when amountWonOrLost is 0
