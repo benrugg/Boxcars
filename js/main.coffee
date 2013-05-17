@@ -12,7 +12,9 @@ $(document).ready( ->
 		
 	# set variables to keep track of things
 	numVisitsToSite = 0
-	lastEndingNumber = 0
+	lastEndingSeen = 0
+	hasLastEndingSeenBeenIncremented = false
+	currentEndingLastLineNumber = 0
 	runningTotal = 0
 	lastNumWins = 0
 	totalWins = 0
@@ -46,6 +48,8 @@ $(document).ready( ->
 		oddsPayout = storedObject.oddsPayout
 		rollsPerTable = storedObject.rollsPerTable
 		numVisitsToSite = storedObject.numVisitsToSite
+		lastEndingSeen = storedObject.lastEndingSeen
+	
 	
 	
 	# function for storing data in local storage
@@ -61,6 +65,7 @@ $(document).ready( ->
 			oddsPayout: oddsPayout,
 			rollsPerTable: rollsPerTable,
 			numVisitsToSite: numVisitsToSite
+			lastEndingSeen: lastEndingSeen
 		}
 		
 		
@@ -406,7 +411,11 @@ $(document).ready( ->
 				# keep saying stuff at the end (until we run out of things to say)
 				endingPartNumber = whichChapter - 11
 				
-				if endingPartNumber <= lastEndingNumber then sayNextLine "ending." + endingPartNumber
+				if endingPartNumber <= currentEndingLastLineNumber then sayNextLine "ending." + endingPartNumber
+				
+				# once we've gotten to the end of our ending, or we've at least seen a bunch
+				# of it, update our storage so we'll see the next ending the next time
+				if endingPartNumber >= currentEndingLastLineNumber or endingPartNumber > 31 then incrementLastEndingSeen()
 		
 		
 		# advance to the next chapter for the next time
@@ -453,7 +462,50 @@ $(document).ready( ->
 	storyFileForThisVisit = storyFiles[(numVisitsToSite - 1) % 2]
 	
 	
+	# prepare which ending we're going to show
+	endingFiles = ["first-ending", "second-ending"]
 	
+	endingFileForThisVisit = endingFiles[lastEndingSeen % 2]
+	
+	
+	
+	
+	
+	
+	
+	# function for incrementing the last ending that we've seen
+	incrementLastEndingSeen = ->
+		
+		# if we've already incremented the last ending seen during this visit to the site,
+		# just quit here. otherwise, set the flag
+		if hasLastEndingSeenBeenIncremented then return
+		
+		hasLastEndingSeenBeenIncremented = true
+		
+		
+		# increment the last ending that we've seen and store it in local storage
+		lastEndingSeen++
+		
+		saveToLocalStorage()
+	
+	
+	
+	
+	
+	
+	# get any values from our query string and overwrite both the defaults and the
+	# values we have stored from the previous visit
+	if location.search
+		
+		queryString = if location.search.indexOf("?") is 0 then location.search.substring(1) else location.search
+		queryStringValues = $.deserialize queryString
+		
+		betAmount = queryStringValues.betAmount ? betAmount
+		oddsPayout = queryStringValues.oddsPayout ? oddsPayout
+		rollsPerTable = queryStringValues.rollsPerTable ? rollsPerTable
+	
+	
+		
 	
 	
 	
@@ -466,21 +518,21 @@ $(document).ready( ->
 	
 	
 	# load the story text in from a json file
-	$.getJSON("story/" + storyFileForThisVisit + ".json", (data) ->
+	$.getJSON("story/stories/" + storyFileForThisVisit + ".json", (data) ->
 		
 		# add the text for the story to Polyglot
 		polyglot.extend data
 		
 		
 		# when the main story is loaded, load the content for our ending
-		$.getJSON("story/first-ending.json", (data) ->
+		$.getJSON("story/endings/" + endingFileForThisVisit + ".json", (data) ->
 			
 			# add the additional text to Polyglot
 			polyglot.extend data
 			
 			
 			# store what our last ending number is
-			lastEndingNumber = data.lastEndingNumber
+			currentEndingLastLineNumber = data.lastLineNumber
 			
 			
 			# now that all the json is all finished loading, start the story
