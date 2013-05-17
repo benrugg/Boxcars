@@ -17,6 +17,7 @@ $(document).ready( ->
 	wonFirstOrSecondRoll = false
 	wonAtFirstTable = false
 	howToHandle = ""
+	documentHeight = 0
 	isWorkerRunningIndefinitely = false
 	isWorkerPaused = false
 	
@@ -74,8 +75,16 @@ $(document).ready( ->
 				tableTotal = if howToHandle is "finishTable" then runningTotal else total
 				
 				wonOrLost = formatWinOrLoss(tableTotal, "Won #{formatCurrency(tableTotal)}", "Lost #{formatCurrency(-tableTotal)}", "Broke even")
-					
+				
 				$("<label>").text(wonOrLost.text).addClass(wonOrLost.result).appendTo($div)
+				
+			
+			# if the height of the document has changed, scroll to the newest div
+			if documentHeight isnt $(document).height()
+				
+				documentHeight = $(document).height()
+				
+				$.scrollTo($div, 500, {offset: -$("header").outerHeight()})
 	
 	
 	
@@ -85,7 +94,7 @@ $(document).ready( ->
 	
 	# function for updating the header
 	updateHeader = (text) ->
-		$("header").text(text)
+		$("header").html(text)
 	
 	
 	# function for showing the footer (where the total is displayed)
@@ -327,6 +336,15 @@ $(document).ready( ->
 				justKeepPlaying()
 				
 				tellNextLine "keepPlaying.rolls"
+				
+			else
+				
+				# keep saying stuff at the end (until we run out of things to say)
+				if whichChapter in [11..58]
+					
+					noEndingPartNumber = whichChapter - 11
+					
+					tellNextLine "noEnding." + noEndingPartNumber
 		
 		
 		# advance to the next chapter for the next time
@@ -366,14 +384,19 @@ $(document).ready( ->
 	# load the story text in from a json file
 	$.getJSON("story/vegas.json", (data) ->
 		
-		# when the json is loaded...
-		
-		
-		# instatiate Polyglot to provide the text for the story
+		# add the text for the story to Polyglot
 		polyglot.extend data
 		
 		
-		# start the story
-		tellStory()
+		# when the first story is loaded, load the content for our ending (or lack thereof)
+		$.getJSON("story/no-ending.json", (data) ->
+			
+			# add the additional text to Polyglot
+			polyglot.extend data
+			
+			
+			# when the json is all finished loading, start the story
+			tellStory()
+		)
 	)
 )

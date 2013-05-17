@@ -15,7 +15,7 @@
 	"firstTable.wonFirstRollsAndWonAgain": "This is your lucky table. Must be the Turkish leather trim. You've got no choice but to keep betting.",
 	"firstTable.wonFirstRollsButLostTheRest": "Ok, you're not as lucky as you thought. But you're still up, so what the heck. Maybe just another 20 rolls.",
 	"firstTable.lostFirstRollsButWonMoreThanOne": "You're on fire. There's no way you can stop now. Might as well go for another 20 rolls.",
-	"firstTable.lostFirstRollsButWonOne": "Vindication. And to think your junior college statistics teacher flunked you. Just to prove her wrong, you decide to play another 20 rolls.",
+	"firstTable.lostFirstRollsButWonOne": "Vindication. And to think your junior college statistics teacher wanted to flunk you. Just to prove her wrong, you decide to play another 20 rolls.",
 	"firstTable.lostAllRolls": "Today is not your lucky day. Either that, or it was the vegan hipster that sat down next to you after the second roll. Time to try another table.",
 	
 	"secondTable.wonBoth": "This is it. One hour at the Bellagio and your life is changed forever. Your new career is boxcars, baby.",
@@ -24,6 +24,6 @@
 	"secondTable.lostBoth": "Crap. It's got to even out eventually, right? Maybe just a few more tables.",
 	
 	"keepPlaying.tablesSlow": "This is so much better than sitting around with a bunch of stuffy scientists discussing the relative benefits of manure oxygenation.",
-	"keepPlaying.tablesFast": "If you play faster, you'll see how this plays out more quickly, right?",
-	"keepPlaying.rolls": "Scientists love large data sets. You're not addicted, you're just being thorough."
+	"keepPlaying.tablesFast": "If you play faster, you'll see how this turns out more quickly. How smart of you.",
+	"keepPlaying.rolls": "You're right. Even faster. Scientists love large data sets. You're not addicted, you're just being thorough."
 }
