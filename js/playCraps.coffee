@@ -8,20 +8,43 @@ context = window ? self
 
 
 # function for rolling one die
-context.rollDie = -> Math.floor(Math.random() * 6) + 1
+context.rollDie = (oddsOfRollingASix) -> 
+	
+	# if our odds of rolling a six are normal, return a standard random 1-6
+	if oddsOfRollingASix is "normal"
+		
+		Math.floor(Math.random() * 6) + 1
+		
+		
+	# else, see if we should roll a six, based on our skewed odds
+	else
+		
+		if Math.random() < oddsOfRollingASix
+			
+			6
+			
+		else
+			
+			Math.floor(Math.random() * 5) + 1
+
 
 
 # function for rolling a pair of dice
-context.rollPairOfDice = ->
+context.rollPairOfDice = (oddsOfRollingASix) ->
 	for i in [0..1]
-		rollDie()
+		rollDie(oddsOfRollingASix)
+
 
 
 
 
 
 # function for running the craps simulation
-context.playCraps = (numRolls, returnAllRolls) ->
+context.playCraps = (numRolls, returnAllRolls, oddsOfRollingASix) ->
+	
+	# set a default value for oddsOfRollingASix
+	oddsOfRollingASix = oddsOfRollingASix ? "normal"
+	
 	
 	# initialize our variables
 	numWins = 0
@@ -36,7 +59,7 @@ context.playCraps = (numRolls, returnAllRolls) ->
 		
 		
 		# roll the dice
-		newRoll = rollPairOfDice()
+		newRoll = rollPairOfDice(oddsOfRollingASix)
 		
 		
 		# if we just rolled a 12, add it to the wins!

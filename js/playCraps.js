@@ -4,28 +4,37 @@
 
   context = typeof window !== "undefined" && window !== null ? window : self;
 
-  context.rollDie = function() {
-    return Math.floor(Math.random() * 6) + 1;
+  context.rollDie = function(oddsOfRollingASix) {
+    if (oddsOfRollingASix === "normal") {
+      return Math.floor(Math.random() * 6) + 1;
+    } else {
+      if (Math.random() < oddsOfRollingASix) {
+        return 6;
+      } else {
+        return Math.floor(Math.random() * 5) + 1;
+      }
+    }
   };
 
-  context.rollPairOfDice = function() {
+  context.rollPairOfDice = function(oddsOfRollingASix) {
     var i, _i, _results;
 
     _results = [];
     for (i = _i = 0; _i <= 1; i = ++_i) {
-      _results.push(rollDie());
+      _results.push(rollDie(oddsOfRollingASix));
     }
     return _results;
   };
 
-  context.playCraps = function(numRolls, returnAllRolls) {
+  context.playCraps = function(numRolls, returnAllRolls, oddsOfRollingASix) {
     var i, newRoll, numWins, rollResults, thisRollWon, _i;
 
+    oddsOfRollingASix = oddsOfRollingASix != null ? oddsOfRollingASix : "normal";
     numWins = 0;
     rollResults = "";
     for (i = _i = 1; _i <= numRolls; i = _i += 1) {
       thisRollWon = false;
-      newRoll = rollPairOfDice();
+      newRoll = rollPairOfDice(oddsOfRollingASix);
       if (newRoll[0] + newRoll[1] === 12) {
         thisRollWon = true;
         numWins++;

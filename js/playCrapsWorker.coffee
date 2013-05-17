@@ -18,6 +18,7 @@ self.addEventListener("message", (e) ->
 	command = e.data.command
 	numRolls = e.data.numRolls ? 0
 	returnAllRolls = e.data.returnAllRolls ? false
+	oddsOfRollingASix = e.data.oddsOfRollingASix ? "normal"
 	delay = e.data.delay ? 10
 	
 	
@@ -26,12 +27,12 @@ self.addEventListener("message", (e) ->
 	if command is "playCraps"
 		
 		# call the function now
-		self.postMessage playCraps numRolls, returnAllRolls
+		self.postMessage playCraps numRolls, returnAllRolls, oddsOfRollingASix
 		
 		
 		# set an interval to keep processing
 		intervalID = setInterval( ->
-			self.postMessage playCraps numRolls, returnAllRolls
+			self.postMessage playCraps numRolls, returnAllRolls, oddsOfRollingASix
 		, delay)
 	
 , false)

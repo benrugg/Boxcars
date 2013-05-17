@@ -7,7 +7,7 @@
   intervalID = 0;
 
   self.addEventListener("message", function(e) {
-    var command, delay, numRolls, returnAllRolls, _ref, _ref1, _ref2;
+    var command, delay, numRolls, oddsOfRollingASix, returnAllRolls, _ref, _ref1, _ref2, _ref3;
 
     if (intervalID) {
       clearInterval(intervalID);
@@ -15,11 +15,12 @@
     command = e.data.command;
     numRolls = (_ref = e.data.numRolls) != null ? _ref : 0;
     returnAllRolls = (_ref1 = e.data.returnAllRolls) != null ? _ref1 : false;
-    delay = (_ref2 = e.data.delay) != null ? _ref2 : 10;
+    oddsOfRollingASix = (_ref2 = e.data.oddsOfRollingASix) != null ? _ref2 : "normal";
+    delay = (_ref3 = e.data.delay) != null ? _ref3 : 10;
     if (command === "playCraps") {
-      self.postMessage(playCraps(numRolls, returnAllRolls));
+      self.postMessage(playCraps(numRolls, returnAllRolls, oddsOfRollingASix));
       return intervalID = setInterval(function() {
-        return self.postMessage(playCraps(numRolls, returnAllRolls));
+        return self.postMessage(playCraps(numRolls, returnAllRolls, oddsOfRollingASix));
       }, delay);
     }
   }, false);

@@ -9,7 +9,14 @@ $(document).ready( ->
 	rollsPerTable = 20
 	
 	
-		
+	# set the odds of rolling a six (can be "normal" or a percentage)
+	oddsOfRollingASix = "normal"
+	
+	
+	
+	
+	
+	
 	# set variables to keep track of things
 	numVisitsToSite = 0
 	lastEndingSeen = 0
@@ -44,9 +51,6 @@ $(document).ready( ->
 		
 		
 		# overwrite our defaults with the stored amounts
-		betAmount = storedObject.betAmount
-		oddsPayout = storedObject.oddsPayout
-		rollsPerTable = storedObject.rollsPerTable
 		numVisitsToSite = storedObject.numVisitsToSite
 		lastEndingSeen = storedObject.lastEndingSeen
 	
@@ -61,10 +65,7 @@ $(document).ready( ->
 		
 		# create an object with all the values we want to store
 		objectToStore = {
-			betAmount: betAmount,
-			oddsPayout: oddsPayout,
-			rollsPerTable: rollsPerTable,
-			numVisitsToSite: numVisitsToSite
+			numVisitsToSite: numVisitsToSite,
 			lastEndingSeen: lastEndingSeen
 		}
 		
@@ -188,7 +189,7 @@ $(document).ready( ->
 	# to do whenever we need the results immediately (in the normal "blocking" way))
 	playCrapsAndHandleResults = (numRolls) ->
 		
-		results = playCraps numRolls, true
+		results = playCraps numRolls, true, oddsOfRollingASix
 		handleResults results.numRolls, results.numWins, results.rollResults, howToHandle
 	
 	
@@ -224,7 +225,7 @@ $(document).ready( ->
 	# function to keep playing new tables (with the worker)
 	newTableIndefinitely = (fastOrSlow) -> 
 		howToHandle = "newTable"
-		worker.postMessage {command: "playCraps", numRolls: rollsPerTable, returnAllRolls: true, delay: if fastOrSlow is "fast" then 100 else 1000}
+		worker.postMessage {command: "playCraps", numRolls: rollsPerTable, returnAllRolls: true, oddsOfRollingASix: oddsOfRollingASix, delay: if fastOrSlow is "fast" then 100 else 1000}
 	
 	
 	# function to keep playing individual rolls indefinitely (with the worker)
@@ -232,7 +233,7 @@ $(document).ready( ->
 		howToHandle = "justKeepPlaying"
 		isWorkerPaused = false
 		isWorkerRunningIndefinitely = true
-		worker.postMessage {command: "playCraps", numRolls: 1, returnAllRolls: false, delay: 10}
+		worker.postMessage {command: "playCraps", numRolls: 1, returnAllRolls: false, oddsOfRollingASix: oddsOfRollingASix, delay: 10}
 	
 	
 	# function to pause the worker
@@ -413,9 +414,9 @@ $(document).ready( ->
 				
 				if endingPartNumber <= currentEndingLastLineNumber then sayNextLine "ending." + endingPartNumber
 				
-				# once we've gotten to the end of our ending, or we've at least seen a bunch
-				# of it, update our storage so we'll see the next ending the next time
-				if endingPartNumber >= currentEndingLastLineNumber or endingPartNumber > 31 then incrementLastEndingSeen()
+				# once we've gotten to the second line of an ending, update our storage
+				# so we'll see the next ending the next time
+				if endingPartNumber >= 2 then incrementLastEndingSeen()
 		
 		
 		# advance to the next chapter for the next time
@@ -452,6 +453,41 @@ $(document).ready( ->
 	
 	
 	
+	# get any values from our query string and overwrite the defaults
+	if location.search
+		
+		# get the values from the query string
+		queryString = if location.search.indexOf("?") is 0 then location.search.substring(1) else location.search
+		queryStringValues = $.deserialize queryString
+		
+		
+		# overwrite any defaults with values that are in the query string
+		betAmount = queryStringValues.betAmount ? betAmount
+		oddsPayout = queryStringValues.oddsPayout ? oddsPayout
+		rollsPerTable = queryStringValues.rollsPerTable ? rollsPerTable
+		oddsOfRollingASix = queryStringValues.oddsOfRollingASix ? oddsOfRollingASix
+		
+		
+		# if we want to start over, reset the story counters, save to local storage, and then
+		# redirect the page to the location without the query string
+		startOver = queryStringValues.startOver ? false
+		
+		if startOver
+			
+			numVisitsToSite = 0
+			lastEndingSeen = 0
+			
+			saveToLocalStorage()
+			
+			location.replace location.protocol + "//" + location.hostname
+			
+			return
+	
+	
+	
+	
+	
+	
 	# increment the counter for the number of times we've visited the site
 	numVisitsToSite++
 	
@@ -463,10 +499,11 @@ $(document).ready( ->
 	
 	
 	# prepare which ending we're going to show
-	endingFiles = ["first-ending", "second-ending"]
+	endingFiles = ["quirky-ending", "change-bet-amount", "change-the-odds", "all-the-options"]
 	
-	endingFileForThisVisit = endingFiles[lastEndingSeen % 2]
+	lastEndingSeen = Math.min lastEndingSeen, endingFiles.length - 1
 	
+	endingFileForThisVisit = endingFiles[lastEndingSeen]
 	
 	
 	
@@ -490,22 +527,6 @@ $(document).ready( ->
 	
 	
 	
-	
-	
-	
-	# get any values from our query string and overwrite both the defaults and the
-	# values we have stored from the previous visit
-	if location.search
-		
-		queryString = if location.search.indexOf("?") is 0 then location.search.substring(1) else location.search
-		queryStringValues = $.deserialize queryString
-		
-		betAmount = queryStringValues.betAmount ? betAmount
-		oddsPayout = queryStringValues.oddsPayout ? oddsPayout
-		rollsPerTable = queryStringValues.rollsPerTable ? rollsPerTable
-	
-	
-		
 	
 	
 	
