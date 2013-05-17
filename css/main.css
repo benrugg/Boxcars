@@ -45,6 +45,12 @@ header a:hover {
 	text-decoration: underline;
 }
 
+header.fake {
+	
+	position: static;
+	visibility: hidden;
+}
+
 
 label.instructions {
 	
@@ -62,7 +68,7 @@ label.instructions {
 
 article {
 	
-	padding: 3.7em 0 2.5em;
+	padding-bottom: 1.9em;
 }
 
 
@@ -70,7 +76,7 @@ article div {
 	
 	font-family: "Alegreya SC", serif;
 	width: 6.6em;
-	margin: 0.6em;
+	margin: 0 0.6em 1.2em;
 	float: left;
 	background-color: rgb(245, 245, 245);
 	padding: 1.2em;
