@@ -12,6 +12,7 @@ $(document).ready( ->
 		
 	# set variables to keep track of things
 	numVisitsToSite = 0
+	lastEndingNumber = 0
 	runningTotal = 0
 	lastNumWins = 0
 	totalWins = 0
@@ -279,26 +280,26 @@ $(document).ready( ->
 			when 1
 				
 				# intro
-				tellNextLine "intro.1"
+				sayNextLine "intro.1"
 				
 				showInstructionsInAMoment()
 				
 			when 2
 				
 				# intro, part 2
-				tellNextLine "intro.2", {betAmount: formatCurrency betAmount}
+				sayNextLine "intro.2", {betAmount: formatCurrency betAmount}
 				
 				hideInstructions()
 				
 			when 3
 				
 				# intro, part 3
-				tellNextLine "intro.3"
+				sayNextLine "intro.3"
 				
 			when 4
 				
 				# intro, part 4
-				tellNextLine "intro.4"
+				sayNextLine "intro.4"
 				
 			when 5
 				
@@ -308,10 +309,10 @@ $(document).ready( ->
 				if lastNumWins is 1
 					
 					wonFirstOrSecondRoll = true
-					tellNextLine "firstRoll.won", {betAmount: formatCurrency(betAmount), oneBetWinnings: formatCurrency(betAmount * oddsPayout)}
+					sayNextLine "firstRoll.won", {betAmount: formatCurrency(betAmount), oneBetWinnings: formatCurrency(betAmount * oddsPayout)}
 					
 				else
-					tellNextLine "firstRoll.lost"
+					sayNextLine "firstRoll.lost"
 				
 			when 6
 				
@@ -323,16 +324,16 @@ $(document).ready( ->
 					wonFirstOrSecondRoll = true
 					
 					if totalWins is 2
-						tellNextLine "secondRoll.wonBoth"
+						sayNextLine "secondRoll.wonBoth"
 					else
-						tellNextLine "secondRoll.wonSecondLostFirst"
+						sayNextLine "secondRoll.wonSecondLostFirst"
 				
 				else
 					
 					if totalWins is 1
-						tellNextLine "secondRoll.wonFirstLostSecond"
+						sayNextLine "secondRoll.wonFirstLostSecond"
 					else
-						tellNextLine "secondRoll.lostBoth"
+						sayNextLine "secondRoll.lostBoth"
 				
 			when 7
 				
@@ -341,19 +342,19 @@ $(document).ready( ->
 				
 				switch
 					when wonFirstOrSecondRoll and lastNumWins > 0
-						tellNextLine "firstTable.wonFirstRollsAndWonAgain"
+						sayNextLine "firstTable.wonFirstRollsAndWonAgain"
 						
 					when wonFirstOrSecondRoll and lastNumWins is 0
-						tellNextLine "firstTable.wonFirstRollsButLostTheRest"
+						sayNextLine "firstTable.wonFirstRollsButLostTheRest"
 						
 					when !wonFirstOrSecondRoll and lastNumWins > 1
-						tellNextLine "firstTable.lostFirstRollsButWonMoreThanOne"
+						sayNextLine "firstTable.lostFirstRollsButWonMoreThanOne"
 						
 					when !wonFirstOrSecondRoll and lastNumWins is 1
-						tellNextLine "firstTable.lostFirstRollsButWonOne"
+						sayNextLine "firstTable.lostFirstRollsButWonOne"
 						
 					when !wonFirstOrSecondRoll and lastNumWins is 0
-						tellNextLine "firstTable.lostAllRolls"
+						sayNextLine "firstTable.lostAllRolls"
 				
 				# store whether or not we won at this first table
 				wonAtFirstTable = totalWins > 0
@@ -368,46 +369,44 @@ $(document).ready( ->
 				
 				switch
 					when wonAtFirstTable and lastNumWins > 0
-						tellNextLine "secondTable.wonBoth"
+						sayNextLine "secondTable.wonBoth"
 						
 					when wonAtFirstTable and lastNumWins is 0
-						tellNextLine "secondTable.wonFirstLostSecond"
+						sayNextLine "secondTable.wonFirstLostSecond"
 						
 					when !wonAtFirstTable and lastNumWins > 0
-						tellNextLine "secondTable.wonSecondLostFirst"
+						sayNextLine "secondTable.wonSecondLostFirst"
 						
 					when !wonAtFirstTable and lastNumWins is 0
-						tellNextLine "secondTable.lostBoth"
+						sayNextLine "secondTable.lostBoth"
 				
 			when 9
 				
 				# keep playing tables indefinitely (slowly)
 				newTableIndefinitely("slow")
 				
-				tellNextLine "keepPlaying.tablesSlow"
+				sayNextLine "keepPlaying.tablesSlow"
 				
 			when 10
 				
 				# keep playing tables indefinitely (fast)
 				newTableIndefinitely("fast")
 				
-				tellNextLine "keepPlaying.tablesFast"
+				sayNextLine "keepPlaying.tablesFast"
 				
 			when 11
 				
 				# just keep playing (individual roles)
 				justKeepPlaying()
 				
-				tellNextLine "keepPlaying.rolls"
+				sayNextLine "keepPlaying.rolls"
 				
 			else
 				
 				# keep saying stuff at the end (until we run out of things to say)
-				if whichChapter in [11..58]
-					
-					noEndingPartNumber = whichChapter - 11
-					
-					tellNextLine "noEnding." + noEndingPartNumber
+				endingPartNumber = whichChapter - 11
+				
+				if endingPartNumber <= lastEndingNumber then sayNextLine "ending." + endingPartNumber
 		
 		
 		# advance to the next chapter for the next time
@@ -417,7 +416,7 @@ $(document).ready( ->
 	
 	
 	# function for telling the next line of the story (using polyglot)
-	tellNextLine = (storyKey, extraValues) ->
+	sayNextLine = (storyKey, extraValues) ->
 		
 		# set the default value for extraValues to be an empty object
 		extraValues = extraValues ? {}
@@ -473,14 +472,18 @@ $(document).ready( ->
 		polyglot.extend data
 		
 		
-		# when the first story is loaded, load the content for our ending (or lack thereof)
-		$.getJSON("story/no-ending.json", (data) ->
+		# when the main story is loaded, load the content for our ending
+		$.getJSON("story/first-ending.json", (data) ->
 			
 			# add the additional text to Polyglot
 			polyglot.extend data
 			
 			
-			# when the json is all finished loading, start the story
+			# store what our last ending number is
+			lastEndingNumber = data.lastEndingNumber
+			
+			
+			# now that all the json is all finished loading, start the story
 			tellStory()
 		)
 	)
