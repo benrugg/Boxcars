@@ -11,6 +11,7 @@ $(document).ready( ->
 	
 		
 	# set variables to keep track of things
+	numVisitsToSite = 0
 	runningTotal = 0
 	lastNumWins = 0
 	totalWins = 0
@@ -25,6 +26,46 @@ $(document).ready( ->
 	
 	# instantiate Polyglot (without phrases, because we'll load them in a minute)
 	polyglot = new Polyglot
+	
+	
+	
+	
+	
+	
+	
+	# if we've been to this site before, load up the values we have stored in local storage
+	if localStorage && localStorage.getItem "boxcars"
+		
+		# parse the JSON object we previously stored
+		storedObject = JSON.parse localStorage.getItem "boxcars"
+		
+		
+		# overwrite our defaults with the stored amounts
+		betAmount = storedObject.betAmount
+		oddsPayout = storedObject.oddsPayout
+		rollsPerTable = storedObject.rollsPerTable
+		numVisitsToSite = storedObject.numVisitsToSite
+	
+	
+	# function for storing data in local storage
+	saveToLocalStorage = ->
+		
+		# if this browser doesn't support local storage, just stop here
+		if !localStorage then return
+		
+		
+		# create an object with all the values we want to store
+		objectToStore = {
+			betAmount: betAmount,
+			oddsPayout: oddsPayout,
+			rollsPerTable: rollsPerTable,
+			numVisitsToSite: numVisitsToSite
+		}
+		
+		
+		# save the object in local storage
+		localStorage.setItem "boxcars", JSON.stringify objectToStore
+	
 	
 	
 	
@@ -403,8 +444,30 @@ $(document).ready( ->
 	
 	
 	
+	# increment the counter for the number of times we've visited the site
+	numVisitsToSite++
+	
+	
+	# prepare which story we're going to tell based on how many times we've visited the site
+	storyFiles = ["vegas", "atlantic-city"]
+	
+	storyFileForThisVisit = storyFiles[(numVisitsToSite - 1) % 2]
+	
+	
+	
+	
+	
+	
+	# store the most updated version of our data in local storage
+	saveToLocalStorage()
+	
+	
+	
+	
+	
+	
 	# load the story text in from a json file
-	$.getJSON("story/vegas.json", (data) ->
+	$.getJSON("story/" + storyFileForThisVisit + ".json", (data) ->
 		
 		# add the text for the story to Polyglot
 		polyglot.extend data

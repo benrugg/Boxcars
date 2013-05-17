@@ -3,11 +3,12 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   $(document).ready(function() {
-    var betAmount, documentHeight, finishTable, firstRoll, handleResults, hideInstructions, howToHandle, instructionsTimeoutID, isWorkerPaused, isWorkerRunningIndefinitely, justKeepPlaying, lastNumWins, newTable, newTableIndefinitely, oddsPayout, pauseWorker, playCrapsAndHandleResults, polyglot, rollsPerTable, runningTotal, secondRoll, showInstructions, showInstructionsInAMoment, showTotal, tellNextLine, tellStory, totalWins, updateHeader, updateRunningTotal, whichChapter, wonAtFirstTable, wonFirstOrSecondRoll, worker;
+    var betAmount, documentHeight, finishTable, firstRoll, handleResults, hideInstructions, howToHandle, instructionsTimeoutID, isWorkerPaused, isWorkerRunningIndefinitely, justKeepPlaying, lastNumWins, newTable, newTableIndefinitely, numVisitsToSite, oddsPayout, pauseWorker, playCrapsAndHandleResults, polyglot, rollsPerTable, runningTotal, saveToLocalStorage, secondRoll, showInstructions, showInstructionsInAMoment, showTotal, storedObject, storyFileForThisVisit, storyFiles, tellNextLine, tellStory, totalWins, updateHeader, updateRunningTotal, whichChapter, wonAtFirstTable, wonFirstOrSecondRoll, worker;
 
     betAmount = 5;
     oddsPayout = 30;
     rollsPerTable = 20;
+    numVisitsToSite = 0;
     runningTotal = 0;
     lastNumWins = 0;
     totalWins = 0;
@@ -19,6 +20,27 @@
     isWorkerRunningIndefinitely = false;
     isWorkerPaused = false;
     polyglot = new Polyglot;
+    if (localStorage && localStorage.getItem("boxcars")) {
+      storedObject = JSON.parse(localStorage.getItem("boxcars"));
+      betAmount = storedObject.betAmount;
+      oddsPayout = storedObject.oddsPayout;
+      rollsPerTable = storedObject.rollsPerTable;
+      numVisitsToSite = storedObject.numVisitsToSite;
+    }
+    saveToLocalStorage = function() {
+      var objectToStore;
+
+      if (!localStorage) {
+        return;
+      }
+      objectToStore = {
+        betAmount: betAmount,
+        oddsPayout: oddsPayout,
+        rollsPerTable: rollsPerTable,
+        numVisitsToSite: numVisitsToSite
+      };
+      return localStorage.setItem("boxcars", JSON.stringify(objectToStore));
+    };
     handleResults = function(numRolls, numWins, rollResults, howToHandle) {
       var $div, losses, tableTotal, total, winnings, wonOrLost;
 
@@ -256,7 +278,11 @@
       }
     });
     $(document).on("click", "header", tellStory);
-    return $.getJSON("story/vegas.json", function(data) {
+    numVisitsToSite++;
+    storyFiles = ["vegas", "atlantic-city"];
+    storyFileForThisVisit = storyFiles[(numVisitsToSite - 1) % 2];
+    saveToLocalStorage();
+    return $.getJSON("story/" + storyFileForThisVisit + ".json", function(data) {
       polyglot.extend(data);
       return $.getJSON("story/no-ending.json", function(data) {
         polyglot.extend(data);
