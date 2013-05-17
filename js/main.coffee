@@ -21,6 +21,12 @@ $(document).ready( ->
 	isWorkerPaused = false
 	
 	
+	# instantiate Polyglot (without phrases, because we'll load them in a minute)
+	polyglot = new Polyglot
+	
+	
+	
+	
 	
 	
 	# function for handling the roll results
@@ -205,22 +211,22 @@ $(document).ready( ->
 			when 1
 				
 				# intro
-				updateHeader("So you're on your way from Charleston to Raleigh when you decide to make a quick stop in Atlantic City.")
+				tellNextLine "intro.1"
 				
 			when 2
 				
 				# intro, part 2
-				updateHeader("You sit down at a $5 craps table and the dealer tells you to place your bet.")
+				tellNextLine "intro.2"
 				
 			when 3
 				
 				# intro, part 3
-				updateHeader("You don't know anything about craps, so you bet on 12.")
+				tellNextLine "intro.3"
 				
 			when 4
 				
 				# intro, part 4
-				updateHeader("The shooter throws the dice, and...")
+				tellNextLine "intro.4"
 				
 			when 5
 				
@@ -230,10 +236,10 @@ $(document).ready( ->
 				if lastNumWins is 1
 					
 					wonFirstOrSecondRoll = true
-					updateHeader("Lucky you. Boxcars on the first roll. You snatch up your winnings but leave your #{ formatCurrency betAmount } bet to play.")
+					tellNextLine "firstRoll.won", {betAmount: formatCurrency betAmount}
 					
 				else
-					updateHeader("Crap, you lost your first bet. It's ok, you knew this wouldn't be easy. You make another bet on 12.")
+					tellNextLine "firstRoll.lost"
 				
 			when 6
 				
@@ -245,16 +251,16 @@ $(document).ready( ->
 					wonFirstOrSecondRoll = true
 					
 					if totalWins is 2
-						updateHeader("What are the odds? Two boxcars in a row, and suddenly you're a gambling addict. You keep playing.")
+						tellNextLine "secondRoll.wonBoth"
 					else
-						updateHeader("Hey, second time's the charm. Now you're hooked. Maybe you can hit boxcars again.")
+						tellNextLine "secondRoll.wonSecondLostFirst"
 				
 				else
 					
 					if totalWins is 1
-						updateHeader("What did you expect? Two wins in a row? But since you're up, you decide to keep playing for a while.")
+						tellNextLine "secondRoll.wonFirstLostSecond"
 					else
-						updateHeader("Lost again. But now you're invested. You decide to play an even 20 rolls before walking away.")
+						tellNextLine "secondRoll.lostBoth"
 				
 			when 7
 				
@@ -263,19 +269,19 @@ $(document).ready( ->
 				
 				switch
 					when wonFirstOrSecondRoll and lastNumWins > 0
-						updateHeader("Seriously, you've found your calling. You cancel your pedicure appointment and play another 20 rolls.")
+						tellNextLine "firstTable.wonFirstRollsAndWonAgain"
 						
 					when wonFirstOrSecondRoll and lastNumWins is 0
-						updateHeader("\"You can't win 'em all\", you tell yourself. But you're still up, so you decide to go for another 20 rolls.")
+						tellNextLine "firstTable.wonFirstRollsButLostTheRest"
 						
 					when !wonFirstOrSecondRoll and lastNumWins > 1
-						updateHeader("Aren't you glad you stuck this out? Your parents would finally be so proud. You'd be an idiot not to go for another 20 rolls.")
+						tellNextLine "firstTable.lostFirstRollsButWonMoreThanOne"
 						
 					when !wonFirstOrSecondRoll and lastNumWins is 1
-						updateHeader("Hey, you did it. Boxcars. Since you're up, you might as well try another 20 rolls.")
+						tellNextLine "firstTable.lostFirstRollsButWonOne"
 						
 					when !wonFirstOrSecondRoll and lastNumWins is 0
-						updateHeader("Nothin'. It must be the table. You slide over to another one and stand next to a man with a white hat and a cane.")
+						tellNextLine "firstTable.lostAllRolls"
 				
 				# store whether or not we won at this first table
 				wonAtFirstTable = totalWins > 0
@@ -290,41 +296,54 @@ $(document).ready( ->
 				
 				switch
 					when wonAtFirstTable and lastNumWins > 0
-						updateHeader("This is like printing money. \"Drinks all around!\", you say. The dealer reminds you that drinks are free, but you don't even hear him. You just keep playing.")
+						tellNextLine "secondTable.wonBoth"
 						
 					when wonAtFirstTable and lastNumWins is 0
-						updateHeader("Maybe this table just isn't hot anymore. You've tasted what it's like to win, and it's too late to turn back now. You try another table.")
+						tellNextLine "secondTable.wonFirstLostSecond"
 						
 					when !wonAtFirstTable and lastNumWins > 0
-						updateHeader("Yes. It was definitely just that last table. The thrill of vicory compells you on.")
+						tellNextLine "secondTable.wonSecondLostFirst"
 						
 					when !wonAtFirstTable and lastNumWins is 0
-						updateHeader("Ok, seriously. Two crap tables in a row. What are you going to tell your friends? You've got to win at least once.")
+						tellNextLine "secondTable.lostBoth"
 				
 			when 9
 				
 				# keep playing tables indefinitely (slowly)
 				newTableIndefinitely("slow")
 				
-				updateHeader("This is going to be a good investment.")
+				tellNextLine "keepPlaying.tablesSlow"
 				
 			when 10
 				
 				# keep playing tables indefinitely (fast)
 				newTableIndefinitely("fast")
 				
-				updateHeader("Maybe you're more hooked than you thought.")
+				tellNextLine "keepPlaying.tablesFast"
 				
 			when 11
 				
 				# just keep playing (individual roles)
 				justKeepPlaying()
 				
-				updateHeader("You're right, let's skip the pleasantries and just see how this plays out.")
+				tellNextLine "keepPlaying.rolls"
 		
 		
 		# advance to the next chapter for the next time
 		whichChapter++
+	
+	
+	
+	
+	# function for telling the next line of the story (using polyglot)
+	tellNextLine = (storyKey, extraValues) ->
+		
+		# set the default value for extraValues to be an empty object
+		extraValues = extraValues ? {}
+		
+		#update the header with the next line of the story
+		updateHeader polyglot.t storyKey, extraValues
+	
 	
 	
 	
@@ -344,6 +363,17 @@ $(document).ready( ->
 	
 	
 	
-	# start the story
-	tellStory()
+	# load the story text in from a json file
+	$.getJSON("story/atlantic-city.json", (data) ->
+		
+		# when the json is loaded...
+		
+		
+		# instatiate Polyglot to provide the text for the story
+		polyglot.extend data
+		
+		
+		# start the story
+		tellStory()
+	)
 )
