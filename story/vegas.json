@@ -1,0 +1,29 @@
+{
+	"intro.1": "You've just landed in Vegas for the 14th Annual Bovine Science Conference.",
+	"intro.2": "As you're checking into your room at the Bellagio, you get sidetracked by a %{betAmount} craps table.",
+	"intro.3": "You only have time for one roll, so you decide to bet on the biggest payout. Boxcars. The 12.",
+	"intro.4": "The stickman hands you the dice and...",
+	
+	"firstRoll.won": "Holy crap. You just made %{oneBetWinnings}. Maybe you have time for one more roll after all. You take your winnings and leave your %{betAmount} bet on the 12.",
+	"firstRoll.lost": "No luck. But hey, you're the only one at the table, so maybe you have time for one more roll. You place another bet on 12.",
+	
+	"secondRoll.wonBoth": "What are the odds? Two boxcars in a row, and suddenly you're a gambling addict. That Bovine Science Conference can wait.",
+	"secondRoll.wonFirstLostSecond": "So maybe that first roll was a fluke. But since you've got some extra money in your pocket, you're struck with a temptation to try a few more times.",
+	"secondRoll.wonSecondLostFirst": "You knew it. That second roll was the best bet of your life. That Bovine Science Conference can wait.",
+	"secondRoll.lostBoth": "Lost again. You're about to walk away, but the Chairman of the Bovine Tuberculosis Research Fund sits down. Now's your chance to impress him. You bet on boxcars for a few more rounds.",
+	
+	"firstTable.wonFirstRollsAndWonAgain": "This is your lucky table. Must be the Turkish leather trim. You've got no choice but to keep betting.",
+	"firstTable.wonFirstRollsButLostTheRest": "Ok, you're not as lucky as you thought. But you're still up, so what the heck. Maybe just another 20 rolls.",
+	"firstTable.lostFirstRollsButWonMoreThanOne": "You're on fire. There's no way you can stop now. Might as well go for another 20 rolls.",
+	"firstTable.lostFirstRollsButWonOne": "Vindication. And to think your junior college statistics teacher flunked you. Just to prove her wrong, you decide to play another 20 rolls.",
+	"firstTable.lostAllRolls": "Today is not your lucky day. Either that, or it was the vegan hipster that sat down next to you after the second roll. Time to try another table.",
+	
+	"secondTable.wonBoth": "This is it. One hour at the Bellagio and your life is changed forever. Your new career is boxcars, baby.",
+	"secondTable.wonFirstLostSecond": "So this second table wasn't as good as you thought. Perhaps if you just played a few more tables to even the odds.",
+	"secondTable.wonSecondLostFirst": "Ah, so it was just that last table after all. This one matches your rawhide boots better, anyway. With uncharacteristic confidence, you keep decide to keep playing.",
+	"secondTable.lostBoth": "Crap. It's got to even out eventually, right? Maybe just a few more tables.",
+	
+	"keepPlaying.tablesSlow": "This is so much better than sitting around with a bunch of stuffy scientists discussing the relative benefits of manure oxygenation.",
+	"keepPlaying.tablesFast": "If you play faster, you'll see how this plays out more quickly, right?",
+	"keepPlaying.rolls": "Scientists love large data sets. You're not addicted, you're just being thorough."
+}

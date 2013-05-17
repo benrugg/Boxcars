@@ -120,7 +120,9 @@
           tellNextLine("intro.1");
           break;
         case 2:
-          tellNextLine("intro.2");
+          tellNextLine("intro.2", {
+            betAmount: formatCurrency(betAmount)
+          });
           break;
         case 3:
           tellNextLine("intro.3");
@@ -133,7 +135,8 @@
           if (lastNumWins === 1) {
             wonFirstOrSecondRoll = true;
             tellNextLine("firstRoll.won", {
-              betAmount: formatCurrency(betAmount)
+              betAmount: formatCurrency(betAmount),
+              oneBetWinnings: formatCurrency(betAmount * oddsPayout)
             });
           } else {
             tellNextLine("firstRoll.lost");
@@ -219,7 +222,7 @@
       }
     });
     $(document).on("click", "header", tellStory);
-    return $.getJSON("story/atlantic-city.json", function(data) {
+    return $.getJSON("story/vegas.json", function(data) {
       polyglot.extend(data);
       return tellStory();
     });

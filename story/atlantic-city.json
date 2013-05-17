@@ -1,6 +1,6 @@
 {
 	"intro.1": "So you're on your way from Charleston to Raleigh when you decide to make a quick stop in Atlantic City.",
-	"intro.2": "You sit down at a $5 craps table and the dealer tells you to place your bet.",
+	"intro.2": "You sit down at a %{betAmount} craps table and the dealer tells you to place your bet.",
 	"intro.3": "You don't know anything about craps, so you bet on 12.",
 	"intro.4": "The shooter throws the dice, and...",
 	

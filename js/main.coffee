@@ -216,7 +216,7 @@ $(document).ready( ->
 			when 2
 				
 				# intro, part 2
-				tellNextLine "intro.2"
+				tellNextLine "intro.2", {betAmount: formatCurrency betAmount}
 				
 			when 3
 				
@@ -236,7 +236,7 @@ $(document).ready( ->
 				if lastNumWins is 1
 					
 					wonFirstOrSecondRoll = true
-					tellNextLine "firstRoll.won", {betAmount: formatCurrency betAmount}
+					tellNextLine "firstRoll.won", {betAmount: formatCurrency(betAmount), oneBetWinnings: formatCurrency(betAmount * oddsPayout)}
 					
 				else
 					tellNextLine "firstRoll.lost"
@@ -364,7 +364,7 @@ $(document).ready( ->
 	
 	
 	# load the story text in from a json file
-	$.getJSON("story/atlantic-city.json", (data) ->
+	$.getJSON("story/vegas.json", (data) ->
 		
 		# when the json is loaded...
 		
