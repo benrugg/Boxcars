@@ -499,7 +499,7 @@ $(document).ready( ->
 	
 	
 	# prepare which ending we're going to show
-	endingFiles = ["quirky-ending", "change-bet-amount", "change-the-odds", "all-the-options"]
+	endingFiles = ["first-ending", "change-num-rolls-per-table", "change-bet-amount", "change-the-odds", "quirky-ending", "final-ending-all-options"]
 	
 	lastEndingSeen = Math.min lastEndingSeen, endingFiles.length - 1
 	

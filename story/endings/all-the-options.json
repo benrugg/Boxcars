@@ -1,5 +1,0 @@
-{
-	"ending.1": "Now you've seen everything. For reals this time.",
-	"ending.2": "Here are all the options. Feel free to mix and match: <a href='?betAmount=5'>?betAmount</a>, <a href='?oddsPayout=30'>?oddsPayout</a>, <a href='?oddsOfRollingASix=normal'>?oddsOfRollingASix</a>, <a href='?rollsPerTable=20'>?rollsPerTable</a>. Or <a href='?startOver=yeah'>reset everything</a>.",
-	"lastLineNumber": 2
-}

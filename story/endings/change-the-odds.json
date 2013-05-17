@@ -1,5 +1,5 @@
 {
 	"ending.1": "Since you've come this far, let's try something a bit more out of the box.",
-	"ending.2": "Let's even the playing field. What do you think? <a href='?oddsPayout=36'>Change the payout on boxcars to 36 to 1</a>. Or <a href='?oddsOfRollingASix=.2'>make the odds of rolling a six 1 out of 5</a>.",
+	"ending.2": "We'll even the playing field. What do you think? <a href='?oddsPayout=36'>Change the payout on boxcars to 36 to 1</a>. Or <a href='?oddsOfRollingASix=.18257418583'>change the odds of rolling a six</a>.",
 	"lastLineNumber": 2
 }

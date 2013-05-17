@@ -1,0 +1,6 @@
+{
+	"ending.1": "Although you're sure to lose in the long run, in the short term it's possible (and even probable) that you'll win several times during a single round.",
+	"ending.2": "Theoretically, if you roll 25 times, there's a 50/50 chance that you'll hit boxcars once in that span.",
+	"ending.3": "Want to try it? <a href='?rollsPerTable=25'>Roll 25 times per table</a> and you should win at half of the them.",
+	"lastLineNumber": 3
+}

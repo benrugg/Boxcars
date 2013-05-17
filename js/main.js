@@ -296,7 +296,7 @@
     numVisitsToSite++;
     storyFiles = ["vegas", "atlantic-city"];
     storyFileForThisVisit = storyFiles[(numVisitsToSite - 1) % 2];
-    endingFiles = ["quirky-ending", "change-bet-amount", "change-the-odds", "all-the-options"];
+    endingFiles = ["first-ending", "change-num-rolls-per-table", "change-bet-amount", "change-the-odds", "quirky-ending", "final-ending-all-options"];
     lastEndingSeen = Math.min(lastEndingSeen, endingFiles.length - 1);
     endingFileForThisVisit = endingFiles[lastEndingSeen];
     incrementLastEndingSeen = function() {
