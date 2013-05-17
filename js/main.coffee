@@ -16,6 +16,7 @@ $(document).ready( ->
 	totalWins = 0
 	wonFirstOrSecondRoll = false
 	wonAtFirstTable = false
+	instructionsTimeoutID = 0
 	howToHandle = ""
 	documentHeight = 0
 	isWorkerRunningIndefinitely = false
@@ -95,6 +96,23 @@ $(document).ready( ->
 	# function for updating the header
 	updateHeader = (text) ->
 		$("header").html(text)
+	
+	
+	# function for showing the instructions after a delay
+	showInstructionsInAMoment = ->
+		instructionsTimeoutID = setTimeout showInstructions, 3000
+	
+	
+	# function for showing the instructions
+	showInstructions = ->
+		$(".instructions").fadeIn(500)
+	
+	
+	# function for hiding the instructions
+	hideInstructions = ->
+		
+		clearTimeout instructionsTimeoutID
+		$(".instructions").fadeOut(250)
 	
 	
 	# function for showing the footer (where the total is displayed)
@@ -222,10 +240,14 @@ $(document).ready( ->
 				# intro
 				tellNextLine "intro.1"
 				
+				showInstructionsInAMoment()
+				
 			when 2
 				
 				# intro, part 2
 				tellNextLine "intro.2", {betAmount: formatCurrency betAmount}
+				
+				hideInstructions()
 				
 			when 3
 				

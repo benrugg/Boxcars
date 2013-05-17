@@ -1,7 +1,7 @@
 {
 	"intro.1": "You've just landed in Vegas for the 14th Annual Bovine Science Conference.",
 	"intro.2": "As you're checking into your room at the Bellagio, you get sidetracked by a %{betAmount} craps table.",
-	"intro.3": "You only have time for one roll, so you decide to bet on the biggest payout. Boxcars. The 12.",
+	"intro.3": "You only have time for one roll, so you decide to make the bet with the biggest payout. Boxcars. The 12.",
 	"intro.4": "The stickman hands you the dice and...",
 	
 	"firstRoll.won": "Holy crap. You just made %{oneBetWinnings}. Maybe you have time for one more roll after all. You take your winnings and leave your %{betAmount} bet on the 12.",

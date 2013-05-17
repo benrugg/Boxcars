@@ -3,7 +3,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   $(document).ready(function() {
-    var betAmount, documentHeight, finishTable, firstRoll, handleResults, howToHandle, isWorkerPaused, isWorkerRunningIndefinitely, justKeepPlaying, lastNumWins, newTable, newTableIndefinitely, oddsPayout, pauseWorker, playCrapsAndHandleResults, polyglot, rollsPerTable, runningTotal, secondRoll, showTotal, tellNextLine, tellStory, totalWins, updateHeader, updateRunningTotal, whichChapter, wonAtFirstTable, wonFirstOrSecondRoll, worker;
+    var betAmount, documentHeight, finishTable, firstRoll, handleResults, hideInstructions, howToHandle, instructionsTimeoutID, isWorkerPaused, isWorkerRunningIndefinitely, justKeepPlaying, lastNumWins, newTable, newTableIndefinitely, oddsPayout, pauseWorker, playCrapsAndHandleResults, polyglot, rollsPerTable, runningTotal, secondRoll, showInstructions, showInstructionsInAMoment, showTotal, tellNextLine, tellStory, totalWins, updateHeader, updateRunningTotal, whichChapter, wonAtFirstTable, wonFirstOrSecondRoll, worker;
 
     betAmount = 5;
     oddsPayout = 30;
@@ -13,6 +13,7 @@
     totalWins = 0;
     wonFirstOrSecondRoll = false;
     wonAtFirstTable = false;
+    instructionsTimeoutID = 0;
     howToHandle = "";
     documentHeight = 0;
     isWorkerRunningIndefinitely = false;
@@ -49,6 +50,16 @@
     };
     updateHeader = function(text) {
       return $("header").html(text);
+    };
+    showInstructionsInAMoment = function() {
+      return instructionsTimeoutID = setTimeout(showInstructions, 3000);
+    };
+    showInstructions = function() {
+      return $(".instructions").fadeIn(500);
+    };
+    hideInstructions = function() {
+      clearTimeout(instructionsTimeoutID);
+      return $(".instructions").fadeOut(250);
     };
     showTotal = function() {
       return $("footer").delay(1000).fadeIn(600);
@@ -129,11 +140,13 @@
       switch (whichChapter) {
         case 1:
           tellNextLine("intro.1");
+          showInstructionsInAMoment();
           break;
         case 2:
           tellNextLine("intro.2", {
             betAmount: formatCurrency(betAmount)
           });
+          hideInstructions();
           break;
         case 3:
           tellNextLine("intro.3");

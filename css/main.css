@@ -46,13 +46,27 @@ header a:hover {
 }
 
 
+label.instructions {
+	
+	display: none;
+	font-family: 'Kotta One', serif;
+	font-size: 17px;
+	position: absolute;
+	top: 18px;
+	right: 18px;
+	padding: 5px 10px;
+	background: rgba(255, 255, 255, 0.3);
+	color: white;
+}
+
+
 article {
 	
 	padding: 3.7em 0 2.5em;
 }
 
 
-div {
+article div {
 	
 	font-family: "Alegreya SC", serif;
 	width: 6.6em;
@@ -62,7 +76,7 @@ div {
 	padding: 1.2em;
 }
 
-span {
+article div span {
 	
 	display: block;
 	font-size: 20px;
@@ -71,12 +85,12 @@ span {
 	white-space: nowrap;
 }
 
-.boxcars {
+span.boxcars {
 	
 	color: blue;
 }
 
-.boxcars::after {
+span.boxcars::after {
 	
 	content: "boxcars";
 	margin-left: .5em;
@@ -85,18 +99,18 @@ span {
 	font-size: 18px;
 }
 
-label {
+article div label {
 	
 	font-weight: bold;
 	font-size: 17px;
 }
 
-label.won {
+article div label.won {
 	
 	color: green;
 }
 
-label.lost {
+article div label.lost {
 	
 	color: red;
 }
