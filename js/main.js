@@ -300,7 +300,7 @@
     numVisitsToSite++;
     numBaseFiles = 2;
     baseFileForThisVisit = "base" + (((numVisitsToSite - 1) % numBaseFiles) + 1);
-    storyFiles = ["vegas", "atlantic-city", "chumash", "back-to-vegas", "river-boat", "online", "gambling-problem", "no-more"];
+    storyFiles = ["atlantic-city", "vegas", "chumash", "back-to-vegas", "river-boat", "online", "gambling-problem", "no-more"];
     if (numVisitsToSite <= storyFiles.length) {
       storyIndex = (numVisitsToSite - 1) % storyFiles.length;
     } else {

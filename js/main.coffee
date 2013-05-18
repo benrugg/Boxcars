@@ -505,7 +505,7 @@ $(document).ready( ->
 	# prepare which story we're going to tell based on how many times we've visited the site
 	# (showing all the stories in order first, and then going randomly, but making sure not
 	# to show the same random story twice in a row)
-	storyFiles = ["vegas", "atlantic-city", "chumash", "back-to-vegas", "river-boat", "online", "gambling-problem", "no-more"]
+	storyFiles = ["atlantic-city", "vegas", "chumash", "back-to-vegas", "river-boat", "online", "gambling-problem", "no-more"]
 	
 	if numVisitsToSite <= storyFiles.length
 		

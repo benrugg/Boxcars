@@ -3,7 +3,10 @@
 	"ending.2": "But you already knew that.",
 	"ending.3": "&nbsp;",
 	"ending.4": "&nbsp;",
-	"ending.5": "&nbsp;",
-	"ending.6": "As a reward for your commendable determination, how about graduating to the high roller tables? What would you like? <a href='?betAmount=20'>$20</a>? <a href='?betAmount=50'>$50</a>? <a href='?betAmount=1000'>$1000</a>?",
-	"lastLineNumber": 6
+	"ending.5": "You still haven't learned when to reload the page, huh?",
+	"ending.6": "&nbsp;",
+	"ending.7": "&nbsp;",
+	"ending.8": "&nbsp;",
+	"ending.9": "As a reward for your commendable determination, how about graduating to the high roller tables? What would you like? <a href='?betAmount=20'>$20</a>? <a href='?betAmount=50'>$50</a>? <a href='?betAmount=1000'>$1000</a>?",
+	"lastLineNumber": 9
 }

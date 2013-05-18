@@ -1,6 +1,6 @@
 {
-	"ending.1": "Think rolling boxcars three times in a row is rare?",
-	"ending.2": "<a href='http://www.time.com/time/nation/article/0,8599,1901663,00.html' target='_blank'>The best successive streak of rolls in craps</a> is 33 million times less likely than that.",
+	"ending.1": "Rolling boxcars three times in a row is pretty rare.",
+	"ending.2": "In comparison, though, <a href='http://www.time.com/time/nation/article/0,8599,1901663,00.html' target='_blank'>the best successive streak of rolls in craps</a> is 33 million times less likely than that.",
 	"ending.3": "&nbsp;",
 	"ending.4": "But I'm sure all it takes is a little bit of determination.",
 	"ending.5": "Which, judging by the fact that you're still reading this, is obviously something you have in spades.",
@@ -66,6 +66,6 @@
 	"ending.65": "<small>Who am I kidding? I hate myself.</small>",
 	"ending.66": "&nbsp;",
 	"ending.67": "But I have to commend you for your hard work. You've worn me down.",
-	"ending.68": "And so as a token of my appreciation, I offer you all the options. Feel free to mix and match: <a href='?rollsPerTable=25'>?rollsPerTable</a>, <a href='?betAmount=50'>?betAmount</a>, <a href='?oddsPayout=25'>?oddsPayout</a>, <a href='?oddsOfRollingASix=.2'>?oddsOfRollingASix</a>.",
+	"ending.68": "And so as a token of my appreciation, I offer you all the options. Feel free to mix and match: <a href='?rollsPerTable=25'>rollsPerTable</a>, <a href='?betAmount=50'>betAmount</a>, <a href='?oddsPayout=25'>oddsPayout</a>, <a href='?oddsOfRollingASix=.2'>oddsOfRollingASix</a>.",
 	"lastLineNumber": 68
 }
