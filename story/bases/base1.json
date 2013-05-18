@@ -1,0 +1,17 @@
+{
+	"firstRoll.won": "Nice work. A %{oneBetWinnings} profit on the first roll. You consider becoming a professional craps player.",
+	
+	"secondRoll.wonBoth": "What are the odds? Two boxcars in a row, and suddenly you're a gambling addict.",
+	"secondRoll.wonFirstLostSecond": "So maybe that first roll was a fluke. But since you've got some extra money in your pocket, you're struck with a temptation to try a few more times.",
+	"secondRoll.wonSecondLostFirst": "You knew it. That second roll was the best bet of your life.",
+	
+	"firstTable.wonFirstRollsAndWonAgain": "This table is awesome. You can't stop now.",
+	"firstTable.wonFirstRollsButLostTheRest": "You can't win them all. But since you're up, maybe just one more table.",
+	"firstTable.lostFirstRollsButWonMoreThanOne": "This was so worth it. Why would you stop now?.",
+	"firstTable.lostFirstRollsButWonOne": "Yes. Just what you thought. Your dedication is definitely paying off.",
+	
+	"secondTable.wonBoth": "This is your destiny. You are the chosen one.",
+	"secondTable.wonFirstLostSecond": "There's no way it was just that first table that was lucky. You move to another and keep playing.",
+	"secondTable.wonSecondLostFirst": "Yeah, it was just that last table that sucked. Now that you've found your lucky spot, you have to keep playing.",
+	"secondTable.lostBoth": "Oops, you swallowed your good luck pendant. A quick trip to the gift shop to buy another and you're ready to keep playing."
+}

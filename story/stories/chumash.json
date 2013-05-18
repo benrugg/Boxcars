@@ -1,0 +1,16 @@
+{
+	"intro.1": "You're working a 9 to 5 job when you suddenly realize that your life would be so much better if you were at Chumash.",
+	"intro.2": "Your boss doesn't care about your work anyway, so you round up some coworkers and head out on Highway 1.",
+	"intro.3": "You sit down at the craps table with your laptop next to you. It's only then you find out you can't actually work from the casino.",
+	"intro.4": "Oh well. With a rush of wind through your beard, you throw the dice and...",
+	
+	"firstRoll.lost": "Not this time, baby. But since your laptop was confiscated, you might as well place another bet on 12.",
+	
+	"secondRoll.lostBoth": "Two losses in a row. But hey, there's free beer, so why turn back now?",
+	
+	"firstTable.lostAllRolls": "At least your coworkers are having fun.",
+	
+	"keepPlaying.tablesSlow": "You tell your coworkers that you're going back to your hotel room to work, but they're not convinced.",
+	"keepPlaying.tablesFast": "Must. Pay off. Backyard. Must. Play. Faster.",
+	"keepPlaying.rolls": "If all your kids roll for you, you can play really fast."
+}

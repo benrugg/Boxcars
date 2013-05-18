@@ -1,0 +1,16 @@
+{
+	"intro.1": "It's 3am, and you've got an itch.",
+	"intro.2": "Where's the closest river boat casino?",
+	"intro.3": "Three hours away. Perfect.",
+	"intro.4": "You throw the first roll just in time for daybreak and...",
+	
+	"firstRoll.lost": "It's alright, you've got lots more rolls ahead of you.",
+	
+	"secondRoll.lostBoth": "No big deal. You're sure to win if you just keep trying.",
+	
+	"firstTable.lostAllRolls": "This table wasn't so great. You're sure another table will be different, though.",
+	
+	"keepPlaying.tablesSlow": "Just keep playing. Just keep playing.",
+	"keepPlaying.tablesFast": "If you move this fast, you're practically invisible.",
+	"keepPlaying.rolls": "Totally invisible. At least to yourself."
+}

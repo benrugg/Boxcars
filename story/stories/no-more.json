@@ -1,0 +1,16 @@
+{
+	"intro.1": "Less talk, more play.",
+	"intro.2": "Just skip right past this.",
+	"intro.3": "I hope you're enjoying yourself.",
+	"intro.4": "And the first roll is...",
+	
+	"firstRoll.lost": "Lost.",
+	
+	"secondRoll.lostBoth": "Lost again.",
+	
+	"firstTable.lostAllRolls": "Lost the whole first table.",
+	
+	"keepPlaying.tablesSlow": "Keep playing table by table.",
+	"keepPlaying.tablesFast": "Keep playing tables fast.",
+	"keepPlaying.rolls": "Keep playing individual roles as fast as you can."
+}

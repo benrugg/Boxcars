@@ -1,0 +1,16 @@
+{
+	"intro.1": "You might have a gambling problem.",
+	"intro.2": "They have hotlines for this.",
+	"intro.3": "The first step is admitting it.",
+	"intro.4": "Or you could just keep playing and...",
+	
+	"firstRoll.lost": "Um, yeah, keep losing.",
+	
+	"secondRoll.lostBoth": "Some people are addicted to losing, you know.",
+	
+	"firstTable.lostAllRolls": "You don't have to go on in silence.",
+	
+	"keepPlaying.tablesSlow": "It's a good thing I'm a computer, or else I'd have to be a mandated reporter.",
+	"keepPlaying.tablesFast": "Ok, fine, I'll shut up now.",
+	"keepPlaying.rolls": "As long as you keep supplying me with power, I'll keep doing your bidding."
+}

@@ -19,6 +19,7 @@ $(document).ready( ->
 	
 	# set variables to keep track of things
 	numVisitsToSite = 0
+	lastStorySeen = 0
 	lastEndingSeen = 0
 	hasLastEndingSeenBeenIncremented = false
 	currentEndingLastLineNumber = 0
@@ -52,6 +53,7 @@ $(document).ready( ->
 		
 		# overwrite our defaults with the stored amounts
 		numVisitsToSite = storedObject.numVisitsToSite
+		lastStorySeen = storedObject.lastStorySeen
 		lastEndingSeen = storedObject.lastEndingSeen
 	
 	
@@ -66,6 +68,7 @@ $(document).ready( ->
 		# create an object with all the values we want to store
 		objectToStore = {
 			numVisitsToSite: numVisitsToSite,
+			lastStorySeen: lastStorySeen,
 			lastEndingSeen: lastEndingSeen
 		}
 		
@@ -475,6 +478,7 @@ $(document).ready( ->
 		if startOver
 			
 			numVisitsToSite = 0
+			lastStorySeen = 0
 			lastEndingSeen = 0
 			
 			saveToLocalStorage()
@@ -492,10 +496,30 @@ $(document).ready( ->
 	numVisitsToSite++
 	
 	
-	# prepare which story we're going to tell based on how many times we've visited the site
-	storyFiles = ["vegas", "atlantic-city"]
+	# prepare to load a base story (with some of the lesser used lines) based on how many
+	# times we've visited the site
+	numBaseFiles = 2
+	baseFileForThisVisit = "base" + (((numVisitsToSite - 1) % numBaseFiles) + 1)
 	
-	storyFileForThisVisit = storyFiles[(numVisitsToSite - 1) % 2]
+	
+	# prepare which story we're going to tell based on how many times we've visited the site
+	# (showing all the stories in order first, and then going randomly, but making sure not
+	# to show the same random story twice in a row)
+	storyFiles = ["vegas", "atlantic-city", "chumash", "back-to-vegas", "river-boat", "online", "gambling-problem", "no-more"]
+	
+	if numVisitsToSite <= storyFiles.length
+		
+		storyIndex = (numVisitsToSite - 1) % storyFiles.length
+		
+	else
+		
+		storyIndex = lastStorySeen
+		
+		while storyIndex is lastStorySeen
+			storyIndex = Math.floor(Math.random() * storyFiles.length)
+	
+	lastStorySeen = storyIndex
+	storyFileForThisVisit = storyFiles[storyIndex]
 	
 	
 	# prepare which ending we're going to show
@@ -538,26 +562,34 @@ $(document).ready( ->
 	
 	
 	
-	# load the story text in from a json file
-	$.getJSON("story/stories/" + storyFileForThisVisit + ".json", (data) ->
+	# load the base story text in from a json file
+	$.getJSON("story/bases/" + baseFileForThisVisit + ".json", (data) ->
 		
-		# add the text for the story to Polyglot
+		# add the text for the base story lines to Polyglot
 		polyglot.extend data
 		
 		
-		# when the main story is loaded, load the content for our ending
-		$.getJSON("story/endings/" + endingFileForThisVisit + ".json", (data) ->
+		# load the rest of the story text
+		$.getJSON("story/stories/" + storyFileForThisVisit + ".json", (data) ->
 			
-			# add the additional text to Polyglot
+			# add the text for the story to Polyglot (overwriting any base lines as necessary)
 			polyglot.extend data
 			
 			
-			# store what our last ending number is
-			currentEndingLastLineNumber = data.lastLineNumber
-			
-			
-			# now that all the json is all finished loading, start the story
-			tellStory()
+			# load the content for our ending
+			$.getJSON("story/endings/" + endingFileForThisVisit + ".json", (data) ->
+				
+				# add the ending text to Polyglot
+				polyglot.extend data
+				
+				
+				# store what our last ending number is
+				currentEndingLastLineNumber = data.lastLineNumber
+				
+				
+				# now that all the json is all finished loading, start the story
+				tellStory()
+			)
 		)
 	)
 )

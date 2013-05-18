@@ -1,0 +1,16 @@
+{
+	"intro.1": "Maybe it would be easier if you just played online.",
+	"intro.2": "You fire up your roommate's Compaq and search AOL Keyword \"Craps\".",
+	"intro.3": "Two minutes, forty-two seconds later, you're at a virtual table with a 38-year-old single white male with the username \"trustypair\".",
+	"intro.4": "Old Trusty's avatar throws the dice and...",
+	
+	"firstRoll.lost": "No worries. You've got all night.",
+	
+	"secondRoll.lostBoth": "Maybe this guy isn't so trusty after all.",
+	
+	"firstTable.lostAllRolls": "Maybe some solitaire will console you.",
+	
+	"keepPlaying.tablesSlow": "Now that you've got this script running, you can make AOL play craps for you.",
+	"keepPlaying.tablesFast": "And then just push that turbo button and you're golden.",
+	"keepPlaying.rolls": "Ah, that's better. Now that solitaire isn't running, you can play until your dial-up disconnects."
+}
