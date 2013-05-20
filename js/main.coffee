@@ -9,8 +9,12 @@ $(document).ready( ->
 	rollsPerTable = 20
 	
 	
-	# set the odds of rolling a six (can be "normal" or a percentage)
+	# set the odds of rolling a six (can be "normal" or a decimal percent from 0-1)
 	oddsOfRollingASix = "normal"
+	
+	
+	# set the number of rolls to play before we see if we've won or lost
+	rollsUntilGameOver = 500
 	
 	
 	
@@ -18,11 +22,14 @@ $(document).ready( ->
 	
 	
 	# set variables to keep track of things
+	numRollsPlayed = 0
+	isGameOver = false
+	allowIndefiniteRolls = false
 	numVisitsToSite = 0
 	lastStorySeen = 0
-	lastEndingSeen = 0
-	hasLastEndingSeenBeenIncremented = false
+	lastEndingNumberSeen = 0
 	currentEndingLastLineNumber = 0
+	haveAllEndingsBeenCompleted = false
 	runningTotal = 0
 	lastNumWins = 0
 	totalWins = 0
@@ -31,7 +38,7 @@ $(document).ready( ->
 	instructionsTimeoutID = 0
 	howToHandle = ""
 	documentHeight = 0
-	isWorkerRunningIndefinitely = false
+	indefiniteWorkerMode = ""
 	isWorkerPaused = false
 	
 	
@@ -54,7 +61,8 @@ $(document).ready( ->
 		# overwrite our defaults with the stored amounts
 		numVisitsToSite = storedObject.numVisitsToSite
 		lastStorySeen = storedObject.lastStorySeen
-		lastEndingSeen = storedObject.lastEndingSeen
+		lastEndingNumberSeen = storedObject.lastEndingNumberSeen
+		haveAllEndingsBeenCompleted = storedObject.haveAllEndingsBeenCompleted
 	
 	
 	
@@ -69,12 +77,24 @@ $(document).ready( ->
 		objectToStore = {
 			numVisitsToSite: numVisitsToSite,
 			lastStorySeen: lastStorySeen,
-			lastEndingSeen: lastEndingSeen
+			lastEndingNumberSeen: lastEndingNumberSeen,
+			haveAllEndingsBeenCompleted: haveAllEndingsBeenCompleted
 		}
 		
 		
 		# save the object in local storage
 		localStorage.setItem "boxcars", JSON.stringify objectToStore
+	
+	
+	# function for clearing location storage
+	clearLocalStorage = ->
+		
+		# if this browser doesn't support local storage, just stop here
+		if !localStorage then return
+		
+		
+		# clear the boxcars data from local storage
+		localStorage.removeItem "boxcars"
 	
 	
 	
@@ -84,6 +104,15 @@ $(document).ready( ->
 	
 	# function for handling the roll results
 	handleResults = (numRolls, numWins, rollResults, howToHandle) ->
+		
+		# ensure that our number variables are treated as numbers
+		numRolls = parseInt numRolls
+		numWins = parseInt numWins
+		
+		
+		# store how many rolls we've played
+		numRollsPlayed += numRolls
+		
 		
 		# store how many wins we had
 		lastNumWins = numWins
@@ -131,22 +160,65 @@ $(document).ready( ->
 				$("<label>").text(wonOrLost.text).addClass(wonOrLost.result).appendTo($div)
 				
 			
-			# if the height of the document has changed, scroll to the newest div
-			if documentHeight isnt $(document).height()
+			# if the height of the document has changed, scroll to the bottom of the page
+			currentDocumentHeight = $(document).height()
+			
+			if documentHeight isnt currentDocumentHeight
 				
-				documentHeight = $(document).height()
+				documentHeight = currentDocumentHeight
 				
-				$.scrollTo($div, 500, {offset: -$("header").outerHeight()})
+				$.scrollTo currentDocumentHeight, 500
+		
+		
+		
+		# if we've played more rolls than our limit, stop now
+		if numRollsPlayed >= rollsUntilGameOver and !allowIndefiniteRolls
+			
+			isGameOver = true
+			
+			pauseWorker()
+			
+			handleFinalWinOrLoss()
 	
 	
 	
+	# function for updating our running total
+	updateRunningTotal = (newTotal) ->
+		
+		# add the newest winnings/losses to the running total
+		runningTotal += newTotal
+		
+		
+		# determine a small win or loss by whether the total is within one win
+		# or loss per 500 rolls
+		smallWinOrLossThreshold = (rollsUntilGameOver / 500) * oddsPayout * betAmount
+		
+		
+		# display the running total
+		runningWinOrLoss = formatWinOrLoss(runningTotal, "You've won a total of #{formatCurrency(runningTotal)}", "You've lost a total of #{formatCurrency(-runningTotal)}", "You're even", smallWinOrLossThreshold)
+		
+		$("footer").text(runningWinOrLoss.text).removeClass().addClass(runningWinOrLoss.result)
 	
 	
 	
+	# function for handling the final win or loss
+	handleFinalWinOrLoss = ->
+		
+		# determine a small win or loss by whether the total is within one win
+		# or loss per 500 rolls
+		smallWinOrLossThreshold = (rollsUntilGameOver / 500) * oddsPayout * betAmount
+		
+		
+		# prepare our text and display it in the header
+		finalWinOrLoss = formatWinOrLoss(runningTotal, "You won! After #{numRollsPlayed} rolls, you're up a total of #{formatCurrency(runningTotal)}.", "You lost. After #{numRollsPlayed} rolls, you're down a total of #{formatCurrency(-runningTotal)}.", "Wow, you broke even. After #{numRollsPlayed} rolls. How about that.", smallWinOrLossThreshold, "Not bad. You won a little bit of money. After #{numRollsPlayed} rolls, you're up a total of #{formatCurrency(runningTotal)}.", "Hey, it's not a disgrace. After #{numRollsPlayed} rolls, you're down a total of #{formatCurrency(-runningTotal)}.")
+		
+		$("header").text(finalWinOrLoss.text).removeClass().addClass(finalWinOrLoss.result)
 	
-	# function for updating the header
+	
+	
+	# function for updating the header (for our normal story text)
 	updateHeader = (text) ->
-		$("header").html(text)
+		$("header").html(text).removeClass()
 	
 	
 	# function for showing the instructions after a delay
@@ -228,62 +300,84 @@ $(document).ready( ->
 	# function to keep playing new tables (with the worker)
 	newTableIndefinitely = (fastOrSlow) -> 
 		howToHandle = "newTable"
+		indefiniteWorkerMode = "newTable" + fastOrSlow.toTitleCase()
 		worker.postMessage {command: "playCraps", numRolls: rollsPerTable, returnAllRolls: true, oddsOfRollingASix: oddsOfRollingASix, delay: if fastOrSlow is "fast" then 100 else 1000}
 	
 	
 	# function to keep playing individual rolls indefinitely (with the worker)
-	justKeepPlaying = ->
-		howToHandle = "justKeepPlaying"
-		isWorkerPaused = false
-		isWorkerRunningIndefinitely = true
-		worker.postMessage {command: "playCraps", numRolls: 1, returnAllRolls: false, oddsOfRollingASix: oddsOfRollingASix, delay: 10}
+	playIndefinitelyAtSuperHighSpeed = ->
+		howToHandle = "playIndefinitelyAtSuperHighSpeed"
+		indefiniteWorkerMode = "playIndefinitelyAtSuperHighSpeed"
+		worker.postMessage {command: "playCraps", numRolls: 100, returnAllRolls: false, oddsOfRollingASix: oddsOfRollingASix, delay: 10}
 	
 	
 	# function to pause the worker
 	pauseWorker = ->
 		isWorkerPaused = true
-		isWorkerRunningIndefinitely = false
 		worker.postMessage {command: "pause"}
 	
 	
-	# listen for the escape key to stop running the simulation
-	$(document).on("keyup", (e) ->
+	# function to toggle the paused/play state of the worker
+	togglePause = ->
 		
-		if e.keyCode is 27
+		# if the game is over or if we're not playing indefinitely, don't
+		# pause or unpause. just quit here.
+		if indefiniteWorkerMode is "" or isGameOver then return
+		
+		
+		# if the game is paused, restart whatever we were doing before
+		if isWorkerPaused
 			
-			if isWorkerRunningIndefinitely
-				pauseWorker()
-			else if isWorkerPaused
-				justKeepPlaying()
-	)
+			isWorkerPaused = false
+			
+			if indefiniteWorkerMode is "newTableSlow"
+				
+				newTableIndefinitely "slow"
+				
+			else if indefiniteWorkerMode is "newTableFast"
+				
+				newTableIndefinitely "fast"
+				
+			else
+				
+				playIndefinitelyAtSuperHighSpeed()
+			
+			
+		# else, pause now
+		else
+			
+			pauseWorker() 
+	
+	
+	# listen for the escape key to stop running the simulation
+	$(document).on("keyup", (e) -> if e.keyCode is 27 then togglePause())
 	
 	
 	
 	
 	
 	
-	# function for updating our running total
-	updateRunningTotal = (newTotal) ->
-		
-		# add the newest winnings/losses to the running total
-		runningTotal += newTotal
-		
-		
-		# display the running total
-		runningWinOrLoss = formatWinOrLoss(runningTotal, "You've won a total of #{formatCurrency(runningTotal)}", "You've lost a total of #{formatCurrency(-runningTotal)}", "You're even")
-		
-		$("footer").text(runningWinOrLoss.text).removeClass().addClass(runningWinOrLoss.result)
-	
-	
-	
-	
-	
-	
-	# prepare all the chapters in the story...
+	# handle all the lines in the story (and the play that accompanies the lines)
 	whichChapter = 1
 	
 	tellStory = ->
 		
+		# if the game is not over and we haven't unlocked indefinite play,
+		# don't allow us to see the ending
+		if whichChapter > 10 and !isGameOver and !allowIndefiniteRolls then return
+		
+		
+		# if the game is over, but we never got to the fast play, just skip past
+		# it to the ending
+		if isGameOver and whichChapter is 10 then whichChapter = 12
+		
+		
+		# if we're about to show the line about indefinite play, but we haven't
+		# unlocked indefinite play, skip to the ending
+		if whichChapter is 11 and !allowIndefiniteRolls then whichChapter = 12
+		
+		
+		# otherwise, show whichever line we're on...
 		switch whichChapter
 			
 			when 1
@@ -405,10 +499,10 @@ $(document).ready( ->
 				
 			when 11
 				
-				# just keep playing (individual roles)
-				justKeepPlaying()
+				# play indefinitely at super high speed
+				playIndefinitelyAtSuperHighSpeed()
 				
-				sayNextLine "keepPlaying.rolls"
+				sayNextLine "keepPlaying.indefinitelyFast"
 				
 			else
 				
@@ -419,7 +513,12 @@ $(document).ready( ->
 				
 				# once we've gotten to the second line of an ending, update our storage
 				# so we'll see the next ending the next time
-				if endingPartNumber >= 2 then incrementLastEndingSeen()
+				if endingPartNumber is 2 then incrementlastEndingNumberSeen()
+				
+				
+				# if we get to the end of the quirky ending, update our storage so we'll
+				# see the very last ending
+				if endingPartNumber is currentEndingLastLineNumber and endingFileForThisVisit is "quirky-ending" then allEndingsHaveBeenCompleted()
 		
 		
 		# advance to the next chapter for the next time
@@ -468,7 +567,10 @@ $(document).ready( ->
 		betAmount = queryStringValues.betAmount ? betAmount
 		oddsPayout = queryStringValues.oddsPayout ? oddsPayout
 		rollsPerTable = queryStringValues.rollsPerTable ? rollsPerTable
+		rollsUntilGameOver = queryStringValues.rollsUntilGameOver ? rollsUntilGameOver
 		oddsOfRollingASix = queryStringValues.oddsOfRollingASix ? oddsOfRollingASix
+		allowIndefiniteRolls = queryStringValues.playIndefinitelyAtSuperHighSpeed ? false
+		if allowIndefiniteRolls is not false then allowIndefiniteRolls = true
 		
 		
 		# if we want to start over, reset the story counters, save to local storage, and then
@@ -477,11 +579,7 @@ $(document).ready( ->
 		
 		if startOver
 			
-			numVisitsToSite = 0
-			lastStorySeen = 0
-			lastEndingSeen = 0
-			
-			saveToLocalStorage()
+			clearLocalStorage()
 			
 			location.replace location.protocol + "//" + location.hostname
 			
@@ -522,12 +620,23 @@ $(document).ready( ->
 	storyFileForThisVisit = storyFiles[storyIndex]
 	
 	
-	# prepare which ending we're going to show
-	endingFiles = ["first-ending", "change-num-rolls-per-table", "change-bet-amount", "change-the-odds", "quirky-ending", "final-ending-all-options"]
+	# prepare which ending we're going to show (showing each one in order, but once you've seen
+	# all of them, but haven't finished the quirky ending, showing them at random)
+	endingIndex = lastEndingNumberSeen
 	
-	lastEndingSeen = Math.min lastEndingSeen, endingFiles.length - 1
+	endingFiles = ["first-ending", "change-num-rolls-per-table", "change-bet-amount", "change-roll-limit", "change-the-odds", "quirky-ending", "final-ending-all-options"]
 	
-	endingFileForThisVisit = endingFiles[lastEndingSeen]
+	if lastEndingNumberSeen >= endingFiles.length - 1
+		
+		if haveAllEndingsBeenCompleted
+			
+			endingIndex = endingFiles.length - 1
+			
+		else
+			
+			endingIndex = Math.floor(Math.random() * (endingFiles.length - 1))
+	
+	endingFileForThisVisit = endingFiles[endingIndex]
 	
 	
 	
@@ -535,17 +644,18 @@ $(document).ready( ->
 	
 	
 	# function for incrementing the last ending that we've seen
-	incrementLastEndingSeen = ->
+	incrementlastEndingNumberSeen = ->
 		
-		# if we've already incremented the last ending seen during this visit to the site,
-		# just quit here. otherwise, set the flag
-		if hasLastEndingSeenBeenIncremented then return
+		lastEndingNumberSeen++
 		
-		hasLastEndingSeenBeenIncremented = true
+		saveToLocalStorage()
+	
+	
+	# function for keeping track of the fact that all the endings have been
+	# completed and we can now show the final ending
+	allEndingsHaveBeenCompleted = ->
 		
-		
-		# increment the last ending that we've seen and store it in local storage
-		lastEndingSeen++
+		haveAllEndingsBeenCompleted = true
 		
 		saveToLocalStorage()
 	

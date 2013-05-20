@@ -45,7 +45,7 @@ header a:hover {
 	text-decoration: underline;
 }
 
-header.fake {
+header#fakeHeader {
 	
 	position: static;
 	visibility: hidden;
@@ -137,12 +137,26 @@ footer {
 	transition: background-color 200ms;
 }
 
+header.won, 
 footer.won {
 	
 	background-color: green;
 }
 
+header.wonALittle,
+footer.wonALittle {
+	
+	background-color: rgb(38, 85, 38);
+}
+
+header.lost,
 footer.lost {
 	
 	background-color: red;
+}
+
+header.lostALittle,
+footer.lostALittle {
+	
+	background-color: rgb(131, 31, 31);
 }

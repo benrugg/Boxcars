@@ -1,4 +1,4 @@
 {
-	"ending.1": "For your convenience -- <a href='?rollsPerTable=20&betAmount=5&oddsPayout=30&oddsOfRollingASix=normal'>all the options</a> -- or -- <a href='?startOver=yeah'>reset everything</a>.",
+	"ending.1": "For your convenience -- <a href='?rollsPerTable=20&betAmount=5&rollsUntilGameOver=500&oddsPayout=30&oddsOfRollingASix=normal'>all the options (with an ending)</a> -- or -- <a href='?rollsPerTable=20&betAmount=5&rollsUntilGameOver=500&oddsPayout=30&oddsOfRollingASix=normal&playIndefinitelyAtSuperHighSpeed=ahhhYeah'>all the options (indefinitely)</a> -- or -- <a href='?startOver=yeah'>reset everything</a>.",
 	"lastLineNumber": 1
 }

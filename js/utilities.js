@@ -8,7 +8,10 @@
     }
   };
 
-  window.formatWinOrLoss = function(amountWonOrLost, wonText, lostText, evenText) {
+  window.formatWinOrLoss = function(amountWonOrLost, wonText, lostText, evenText, smallWinOrLossThreshold, wonALittleText, lostALittleText) {
+    smallWinOrLossThreshold = smallWinOrLossThreshold != null ? smallWinOrLossThreshold : 0;
+    wonALittleText = wonALittleText != null ? wonALittleText : wonText;
+    lostALittleText = lostALittleText != null ? lostALittleText : lostText;
     switch (false) {
       case amountWonOrLost !== 0:
         return {
@@ -16,15 +19,30 @@
           result: "even"
         };
       case !(amountWonOrLost > 0):
-        return {
-          text: wonText,
-          result: "won"
-        };
+        if (amountWonOrLost > smallWinOrLossThreshold) {
+          return {
+            text: wonText,
+            result: "won"
+          };
+        } else {
+          return {
+            text: wonALittleText,
+            result: "wonALittle"
+          };
+        }
+        break;
       case !(amountWonOrLost < 0):
-        return {
-          text: lostText,
-          result: "lost"
-        };
+        if (amountWonOrLost < -smallWinOrLossThreshold) {
+          return {
+            text: lostText,
+            result: "lost"
+          };
+        } else {
+          return {
+            text: lostALittleText,
+            result: "lostALittle"
+          };
+        }
     }
   };
 
