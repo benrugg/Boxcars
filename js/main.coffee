@@ -581,7 +581,7 @@ $(document).ready( ->
 			
 			clearLocalStorage()
 			
-			location.replace location.protocol + "//" + location.hostname
+			location.replace location.protocol + "//" + location.hostname + location.pathname
 			
 			return
 	

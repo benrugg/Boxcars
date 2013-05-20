@@ -346,7 +346,7 @@
       startOver = (_ref6 = queryStringValues.startOver) != null ? _ref6 : false;
       if (startOver) {
         clearLocalStorage();
-        location.replace(location.protocol + "//" + location.hostname);
+        location.replace(location.protocol + "//" + location.hostname + location.pathname);
         return;
       }
     }
